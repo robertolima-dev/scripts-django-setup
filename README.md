@@ -256,6 +256,62 @@ class Evaluation(BaseModel):
 - O nome do modelo gerado sempre será capitalizado.
 - Os scripts **não sobrescrevem arquivos existentes**, permitindo ajustes manuais pós-criação.
 
+
+---
+
+## 🏗️ Script: `setup_admin.py`
+
+Este script cria automaticamente a estrutura do `admin.py` para um app Django.
+
+### 📌 Uso
+```sh
+python setup_admin.py <nome_do_app>
+```
+
+### 🎯 Exemplo
+```sh
+python setup_admin.py payment
+```
+
+### 📄 Exemplo de Saída (`admin.py`)
+```python
+from django.contrib import admin
+from apps.payment.models import Payment
+
+@admin.action(description='Teste action')
+def test_action(modeladmin, request, queryset):
+    for instance in queryset:
+        print(instance)
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+    )
+    list_display_links = ('id', )
+    fields = (
+        'id',
+    )
+    readonly_fields = (
+        'id',
+    )
+    search_fields = [
+        'id',
+    ]
+    ordering = ['-created_at']
+
+    actions = [
+        test_action,
+    ]
+
+    inlines = ()
+```
+
+## 🚀 Observações
+- O script **sobrescreve** o arquivo `admin.py` existente no app especificado.
+- O nome do modelo é capitalizado automaticamente com base no nome do app.
+- A estrutura gerada segue as melhores práticas do Django Admin.
+
 ---
 
 ## 🔗 Contribuição
@@ -265,4 +321,3 @@ Se desejar contribuir, abra um Pull Request com melhorias ou novos recursos. Fee
 
 ## 📝 Licença
 Este projeto está sob a licença MIT.
-
