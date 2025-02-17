@@ -1,6 +1,6 @@
 # README - Scripts de Automação para Django
 
-Este repositório contém dois scripts úteis para automatizar a criação de aplicações e modelos no Django.
+Este repositório contém 4 scripts úteis para automatizar a criação de aplicações, model e admin no Django.
 
 ## 📌 Setup
 Certifique-se de que você tem o Python instalado e que está dentro do ambiente virtual do seu projeto Django.
