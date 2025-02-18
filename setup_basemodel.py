@@ -33,6 +33,9 @@ class BaseModel(models.Model):
     def delete(self, *args, **kwargs):
         self.deleted_at = timezone.now()
         self.save()
+
+    def force_delete(self):
+        super(BaseModel, self).delete()
 """
 
     with open(file_path, "w", encoding="utf-8") as f:
