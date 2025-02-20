@@ -4,7 +4,7 @@ import sys
 STRUCTURE = {
     "api": ["serializers.py", "viewsets.py"],
     "managers": ["manager.py"],
-    "": ["signals.py", "filters.py"]
+    "": ["signals.py", "filters.py",]
 }
 
 TEMPLATES = {
@@ -31,9 +31,10 @@ class {app_class}Serializer(serializers.ModelSerializer):
 """,
 
     "api/viewsets.py": """from django_filters.rest_framework import DjangoFilterBackend # noqa501
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from apps.{app_name}.api.serializers import {app_class}Serializer
 from apps.{app_name}.filters import {app_class}Filter
@@ -48,6 +49,8 @@ class {app_class}View(viewsets.ModelViewSet):
 
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_class = {app_class}Filter
+    search_fields = ['name', 'description']
+    ordering_fields = ['name']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -78,7 +81,6 @@ class {app_class}View(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         instance.delete()
-
 """,
 
     "managers/manager.py": """# from apps.{app_name}.models import {app_class} # noqa501
@@ -144,6 +146,7 @@ def create_app_structure(app_name):
 
         for file in files:
             file_path = os.path.join(folder_path, file.format(app_name=app_name)) # noqa501
+            print(file_path)
             if not os.path.exists(file_path):
                 with open(file_path, "w", encoding="utf-8") as f:
                     content = TEMPLATES.get(os.path.join(folder, file.format(app_name=app_name)), "").format(app_name=app_name, app_class=app_class) # noqa501
